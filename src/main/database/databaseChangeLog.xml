@@ -1,0 +1,136 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <property name="now" value="now()" dbms="postgresql"/>
+
+    <!--<changeSet author="modonnell" id="create_sequences">
+        <createSequence incrementBy="1"
+                        minValue="1"
+                        sequenceName="appfeatureid_seq"
+                        startValue="1"/>
+        <createSequence incrementBy="1"
+                        minValue="1"
+                        sequenceName="appfeaturesettingid_seq"
+                        startValue="1"/>
+    </changeSet>-->
+
+    <changeSet author="modonnell" id="original_1" >
+        <createTable tableName="actor">
+            <column autoIncrement="true" name="actorID" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="actor_pkey"/>
+            </column>
+            <column name="actorfirstname" type="VARCHAR(50)"/>
+            <column name="actorlastname" type="VARCHAR(50)"/>
+            <column name="createduserid" type="INT"/>
+            <column name="createddate" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="lastmodifieddate" type="timestamp"/>
+            <column name="activeflag" type="boolean"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="modonnell" id="original_2" >
+        <createTable tableName="user">
+            <column autoIncrement="true" name="userid" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="user_pkey"/>
+            </column>
+            <column name="UserName" type="VARCHAR(250)"/>
+            <column name="createddate" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="lastmodifieddate" type="timestamp"/>
+            <column name="activeflag" type="boolean"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="modonnell" id="AppFeature" >
+        <createTable tableName="appfeature">
+            <column defaultValueSequenceNext="appfeatureid_seq" name="appfeatureid" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="appfeature_pkey"/>
+            </column>
+            <column name="appfeaturename" type="varchar(50)" />
+            <column name="appfeaturenote" type="varchar(250)"/>
+            <column name="createddate" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="lastmodifieddate" type="timestamp"/>
+            <column name="activeflag" type="boolean"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="modonnell" id="AppFeatureInserts" >
+        <insert tableName="appfeature" >
+            <column name="appfeaturename" value="TestingFeatureOne" />
+            <column name="appfeaturenote" value="Note One" />
+            <column name="createddate" valueDate="${now}" />
+            <column name="lastmodifieddate" valueDate="${now}" />
+            <column name="activeflag" valueBoolean="true" />
+        </insert>
+        <insert tableName="appfeature" >
+            <column name="appfeaturename" value="TestingFeatureTwo" />
+            <column name="appfeaturenote" value="Note Two" />
+            <column name="createddate" valueDate="${now}" />
+            <column name="lastmodifieddate" valueDate="${now}" />
+            <column name="activeflag" valueBoolean="true" />
+        </insert>
+    </changeSet>
+
+    <changeSet author="modonnell" id="AppFeatureSetting" >
+        <createTable tableName="appfeaturesetting">
+            <column defaultValueSequenceNext="appfeaturesettingid_seq" name="appfeaturesettingid" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="appfeaturesetting_pkey"/>
+            </column>
+            <column name="appfeatureid" type="int"/>
+            <column name="appfeaturekey" type="varchar(50)" />
+            <column name="appfeaturevalue" type="varchar(50)" />
+            <column name="createddate" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="lastmodifieddate" type="timestamp"/>
+            <column name="activeflag" type="boolean"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="modonnell" id="AppFeatureSetting_inserts" >
+        <insert tableName="appfeaturesetting" >
+            <column name="appfeatureid" value="1" />
+            <column name="appfeaturekey" value="appfeature1.value1" />
+            <column name="appfeaturevalue" value="App Feature 1, Value 1" />
+            <column name="createddate" valueDate="${now}" />
+            <column name="lastmodifieddate" valueDate="${now}" />
+            <column name="activeflag" valueBoolean="true" />
+        </insert>
+        <insert tableName="appfeaturesetting" >
+            <column name="appfeatureid" value="1" />
+            <column name="appfeaturekey" value="appfeature1.value2" />
+            <column name="appfeaturevalue" value="App Feature 1, Value 2" />
+            <column name="createddate" valueDate="${now}" />
+            <column name="lastmodifieddate" valueDate="${now}" />
+            <column name="activeflag" valueBoolean="true" />
+        </insert>
+        <insert tableName="appfeaturesetting" >
+            <column name="appfeatureid" value="1" />
+            <column name="appfeaturekey" value="appfeature1.value3" />
+            <column name="appfeaturevalue" value="App Feature 1, Value 3" />
+            <column name="createddate" valueDate="${now}" />
+            <column name="lastmodifieddate" valueDate="${now}" />
+            <column name="activeflag" valueBoolean="true" />
+        </insert>
+        <insert tableName="appfeaturesetting" >
+            <column name="appfeatureid" value="2" />
+            <column name="appfeaturekey" value="appfeature2.value1" />
+            <column name="appfeaturevalue" value="App Feature 2, Value 1" />
+            <column name="createddate" valueDate="${now}" />
+            <column name="lastmodifieddate" valueDate="${now}" />
+            <column name="activeflag" valueBoolean="true" />
+        </insert>
+    </changeSet>
+
+
+    <changeSet author="modonnell" id="actor_fkey_1" >
+        <addForeignKeyConstraint baseColumnNames="createduserid" baseTableName="actor" constraintName="actor_cuid_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="userid" referencedTableName="user"/>
+    </changeSet>
+
+
+    <changeSet author="modonnell" id="AppFeatureValue_constraint" >
+        <addForeignKeyConstraint baseColumnNames="appfeatureid" baseTableName="appfeaturesetting" constraintName="afv_afid_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="appfeatureid" referencedTableName="appfeature"/>
+    </changeSet>
+</databaseChangeLog>
